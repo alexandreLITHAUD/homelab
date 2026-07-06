@@ -1,0 +1,71 @@
+services:
+
+  # PostgreSQL database service
+  db:
+    image: postgres:${POSTGRES_VERSION}
+    restart: always
+    # Configuration
+    shm_size: 128mb
+    container_name: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+      GITEA_DB_USER: ${GITEA_DB_USER}
+      GITEA_DB_NAME: ${GITEA_DB_NAME}
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_db_password
+    env_file:
+      - ./.env
+    # Data and Networking
+    volumes:
+      - ./data:/var/lib/postgresql/data
+      - ./initdb.d:/docker-entrypoint-initdb.d:ro
+    secrets:
+      - gitea_db_password
+      - postgres_db_password
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    networks:
+      - homelab
+
+# Adminer service for database management
+# Useful for managing the PostgreSQL database through a web interface
+  adminer:
+    image: adminer:${ADMINER_VERSION}
+    restart: always
+    # Configuration
+    container_name: adminer
+    # Data and Networking
+    ports:
+      - "${ADMINER_PORT}:8080"
+    networks:
+      - homelab
+
+# Prometheus PostgreSQL Exporter service for monitoring
+# Exposes metrics for Prometheus to scrape
+  postgres_exporter:
+    image: prometheuscommunity/postgres-exporter:${POSTGRES_EXPORTER_VERSION}
+    restart: unless-stopped
+    environment:
+      DATA_SOURCE_URI: "db:5432/${POSTGRES_DB}?sslmode=disable"
+      DATA_SOURCE_USER: ${POSTGRES_USER}
+      DATA_SOURCE_PASS_FILE: /run/secrets/postgres_db_password
+    secrets:
+      - postgres_db_password
+    ports:
+      - "${POSTGRES_EXPORTER_PORT}:9187"
+    networks:
+      - homelab
+    depends_on:
+      - db
+
+# Secrets
+secrets:
+  gitea_db_password:
+    file: ../secrets/gitea-db-password.txt
+  postgres_db_password:
+    file: ../secrets/postgres-db-password.txt
+
+# Networks
+networks:
+  homelab:
+    external: true
