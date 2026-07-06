@@ -1,0 +1,3 @@
+include:
+  - ./postgresql/docker-compose.yaml
+  - ./gitea/docker-compose.yaml
