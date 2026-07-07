@@ -2,6 +2,7 @@ services:
   gitea:
     image: gitea/gitea:${GITEA_VERSION}
     restart: unless-stopped
+    userns_mode: "keep-id"
     # Configuration
     container_name: gitea
     environment:
@@ -28,12 +29,10 @@ services:
       - "${GITEA_SSH_PORT}:22"
     networks:
       - homelab
-
 # Secrets
 secrets:
   gitea_db_password:
     file: ../secrets/gitea-db-password.txt
-
 # Networks
 networks:
   homelab:
