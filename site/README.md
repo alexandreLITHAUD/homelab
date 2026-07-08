@@ -1,0 +1,3 @@
+- receive the alerts
+- Have informations about the docker containers status and logs
+- More things
