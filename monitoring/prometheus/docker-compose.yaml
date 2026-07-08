@@ -13,6 +13,7 @@ services:
     volumes:
       - ./data:/prometheus
       - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./config/alert_rules.yml:/etc/prometheus/alert_rules.yml
     ports:
       - ${PROMETHEUS_PORT}:9090
     networks:

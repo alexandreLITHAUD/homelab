@@ -1,3 +1,4 @@
 - receive the alerts
 - Have informations about the docker containers status and logs
-- More things
+- Have ping on websites and tools deployed
+- More
