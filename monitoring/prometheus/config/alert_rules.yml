@@ -1,0 +1,29 @@
+groups:
+  - name: gitea_alerts
+    rules:
+      - alert: GiteaDown
+        expr: up{job="gitea"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Gitea is down"
+          description: "Gitea target has been unreachable for more than 1 minute."
+  - name: postgres_alerts
+    rules:
+      - alert: PostgresDown
+        expr: up{job="postgres"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Postgres exporter is down"
+          description: "postgres_exporter has been unreachable for more than 1 minute."
+      - alert: PostgresTooManyConnections
+        expr: sum(pg_stat_activity_count) by (instance) > 100
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Postgres has too many connections"
+          description: "Instance {{ $labels.instance }} has more than 100 active connections."

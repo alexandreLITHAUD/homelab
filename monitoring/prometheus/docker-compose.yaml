@@ -1,0 +1,37 @@
+services:
+  # Prometheus service for monitoring
+  prometheus:
+    image: prom/prometheus:v3
+    restart: unless-stopped
+    userns_mode: "keep-id"
+    # Configuration
+    container_name: prometheus
+    env_file:
+      - ./.env
+    # Data and Networking
+    volumes:
+      - ./data:/prometheus
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - ${PROMETHEUS_PORT}:9090
+    networks:
+      - homelab
+  # Alertmanager service for handling alerts
+  alertmanager:
+    image: prom/alertmanager:v0
+    restart: unless-stopped
+    userns_mode: "keep-id"
+    # Configuration
+    container_name: alertmanager
+    env_file:
+      - ./.env
+    # Data and Networking
+    volumes:
+      - ./config/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    ports:
+      - ${ALERTMANAGER_PORT}:9093
+    networks:
+      - homelab
+networks:
+  homelab:
+    external: true
