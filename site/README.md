@@ -1,4 +1,8 @@
 - receive the alerts
 - Have informations about the docker containers status and logs
 - Have ping on websites and tools deployed
-- More
+- one tab for each in a SPA
+- Maybe a tab for gitea information using api
+- Add pointless things like
+  - a noté taking tab
+  - a calendrier ?
