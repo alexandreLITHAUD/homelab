@@ -2,3 +2,4 @@ include:
   - ./postgresql/docker-compose.yaml
   - ./gitea/docker-compose.yaml
   - ./monitoring/prometheus/docker-compose.yaml
+  - ./monitoring/scrapers/docker-compose.yaml

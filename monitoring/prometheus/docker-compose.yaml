@@ -1,7 +1,7 @@
 services:
   # Prometheus service for monitoring
   prometheus:
-    image: prom/prometheus:v3
+    image: prom/prometheus:${PROMETHEUS_VERSION}
     restart: unless-stopped
     userns_mode: "keep-id"
     user: "${UID}:${GID}"
@@ -20,7 +20,7 @@ services:
       - homelab
   # Alertmanager service for handling alerts
   alertmanager:
-    image: prom/alertmanager:v0
+    image: prom/alertmanager:${ALERTMANAGER_VERSION}
     restart: unless-stopped
     userns_mode: "keep-id"
     # Configuration

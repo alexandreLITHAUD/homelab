@@ -1,0 +1,23 @@
+services:
+  # Cadvisor Scraper for monitoring Docker containers
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:${CADVISOR_VERSION}
+    restart: unless-stopped
+    privileged: true
+    # Configuration
+    container_name: cadvisor
+    env_file:
+      - ./.env
+    # Data and Networking
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/containers:/var/lib/containers:ro
+    ports:
+      - ${CADVISOR_VERSION}:8080
+    networks:
+      - homelab
+networks:
+  homelab:
+    external: true
